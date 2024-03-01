@@ -1,0 +1,48 @@
+{
+  "list": [{
+    "describe": "jesmon 足球 facebook",
+    "status": 0,
+    "campaignName": "brhoma-jmahfb-134",
+    "landerName": "homa-jm-134",
+    "deliveryType": 0,
+    "trackPeople": 0,
+    "deliveryTeamNumber": 0,
+    "advertisingPrefix": 0,
+    "s2s": 0,
+    "startDate": "",
+    "area": "br",
+    "areaName": "巴西",
+    "promotionTargetPage": 0,
+    "baseURL": "https://betfrom.com",
+    "keyPublicityDirections": 0,
+    "promoteEquipmentGoals": 0,
+    "promotionPeriod": 0,
+    "pixel": "913079263678605",
+    "token": "EAAWnjZAHH4lkBOxGKSQdZAGb6nZBiUAwRvQ6rkeTWpOT9ZBdmtvhZBsr4B0GSbtKkuYnrs6KsLZCva9nI4qnPEQwqzChAZCZB2wSh1NeZAZADKgQW7AbZA92eJxcZAE7fvgxA8dSQeOTPZBdCoFaaky1to9YZCl71UwTxeUrStjdMvXCfaOBJiGjxgZCz0ZAfDWfRNQw1FUd7QZDZD",
+    "url": "https://betfrom.com?btag=fbajm_brhomh134-",
+    "landingPageUrl": "https://wheel-landingpage-box.pages.dev/wheel4/"
+  }],
+  "codeList": [{
+    "headerCode": "\n<script>\n  !function(f,b,e,v,n,t,s)\n  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?\n  n.callMethod.apply(n,arguments):n.queue.push(arguments)};\n  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';\n  n.queue=[];t=b.createElement(e);t.async=!0;\n  t.src=v;s=b.getElementsByTagName(e)[0];\n  s.parentNode.insertBefore(t,s)}(window, document,'script',\n  'https://connect.facebook.net/en_US/fbevents.js');\n  fbq('init', 'pixel');\n  fbq('track', 'PageView');\n</script>\n<noscript>\n    <img height=\"1\" width=\"1\" style=\"display:none\" src=\"https://www.facebook.com/tr?id=pixel&ev=PageView&noscript=1\"/>\n</noscript>",
+    "footerCode": "\n<script>\n  window.onload = function() {\n    document.cookie = \"fb.currentHref=\" + window.location.href + \"; path=/\";\n  }\n</script>",
+    "title": "faceBook",
+    "type": "lander",
+    "img": "/src/assets/Facebook.svg.png"
+  }, {
+    "code": "\n<!DOCTYPE html>\n<html lang=\"en\" style=\"--sidebar-width: 300px;\">\n\n<head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>load</title>\n    <style>\n        .loading-container {\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            height: 100vh;\n        }\n\n        .loading-spinner {\n            border: 8px solid #f3f3f3;\n            /* Light gray */\n            border-top: 8px solid #3498db;\n            /* Blue */\n            border-radius: 50%;\n            width: 60px;\n            height: 60px;\n            animation: spin 1s linear infinite;\n        }\n\n        @keyframes spin {\n            0% {\n                transform: rotate(0deg);\n            }\n\n            100% {\n                transform: rotate(360deg);\n            }\n        }\n    </style>\n\n</head>\n\n<body>\n    <div class=\"loading-container\">\n        <div class=\"loading-spinner\"></div>\n    </div>\n</body>\n\n<script>\n    var clickid = \"\";\n    var cookie_data = {\n\n    };\n    let id = 'pixel';\n    let access_token = 'tokens';\n    let dt_url = \"https://betfrom.com/popup/registration?btag=\";\n\n\n    async function jump() {\n\n        var url = \"https://bs2s.semfoundry.com/api/BetfromADMonitor/setCookie\";\n        var data = {\n            key: clickid,\n            data: cookie_data\n        };\n        try {\n            var response = await sendPostRequest(url, data);\n\n        } catch (error) {\n            console.log(\"Error:\", error);\n            return;\n        }\n        var ref_url = dt_url + clickid;\n\n        window.location.href = ref_url\n    }\n\n     function getCookie(name) {\n        var cookies = document.cookie.split(\"; \");\n        for (var i = 0; i < cookies.length; i++) {\n            var cookie = cookies[i].split(\"=\");\n            if (cookie[0] === name) {\n                return cookies[i].substring(cookie[0].length+1);\n            }\n        }\n        return null;\n    }\n\n    async function sendPostRequest(url, data) {\n        return new Promise(function (resolve, reject) {\n            var xhr = new XMLHttpRequest();\n            xhr.open(\"POST\", url);\n            xhr.setRequestHeader(\"Content-Type\", \"application/json\");\n\n            xhr.addEventListener(\"load\", function () {\n                if (xhr.status === 200) {\n                    var response = xhr.responseText;\n                    resolve(response);\n                } else {\n                    reject(xhr.statusText);\n                }\n            });\n\n            xhr.addEventListener(\"error\", function () {\n                reject(\"Network error\");\n            });\n\n            xhr.send(JSON.stringify(data));\n        });\n    }\n\n    window.onload = async function () {\n\n        const urlParams = new URLSearchParams(window.location.search);\n        clickid = urlParams.get('clickid') ? urlParams.get('clickid') : \"\";\n        if (clickid === \"\") {\n            console.log(\"warning: find not clickid\");\n            return;\n        }\n\n        cookie_data = {\n            \"user_data\": {\n                \"client_user_agent\": navigator.userAgent,\n                \"fbc\": getCookie('_fbc'),\n                \"fbp\": getCookie('_fbp')\n            },\n            \"event_source_url\": getCookie('fb.currentHref'),\n            \"pixelid\": id,\n            \"access_token\": access_token,\n            \"__sem_type_name\": \"facebook-bi\",\n            \"__sem_type_verion\": \"2.0\"\n        };\n\n        await jump();\n\n    }\n</script>\n\n</html>\n          ",
+    "title": "faceBook",
+    "type": "offer",
+    "img": "/src/assets/Facebook.svg.png"
+  }],
+  "webGroup": [{
+    "github": "123",
+    "group": "1112",
+    "img": "",
+    "id": 0
+  }, {
+    "github": "123",
+    "group": "0",
+    "url": "img/image 57.png",
+    "id": 1
+  }]
+}

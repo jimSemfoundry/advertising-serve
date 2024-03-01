@@ -6,6 +6,12 @@ const schedule = require('node-schedule');
 const archiver = require('archiver');
 const compressing = require('compressing');
 
+const download = require("download-git-repo");
+const path = require("path");
+const rimraf = require("rimraf");
+
+const dir = path.join(process.cwd(), "file"); //这里可以自定义下载的地址
+rimraf.sync(dir, {});  //在下载前需要保证路径下没有同名文件
 // const https = require('https');
 // const fs = require('fs');
 // let options = {
@@ -16,8 +22,12 @@ const compressing = require('compressing');
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.urlencoded({extended : true}))
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended : true}))
+
+const multer = require('multer');
+const {getDb,saveDb} =require('./db')
+
 
 // 处理application/x-www-form-urlencoded内容格式的请求体
 // app.use(bodyParser.urlencoded({extended: false}));
@@ -31,34 +41,53 @@ app.use(bodyParser.json());
 
 const port = 4000;
 
+
+
 app.get("/jimapi/", (req, res) => res.send("Hello World!"));
-app.get("/jimapi/build",  (req, res) => {
-    fs.readFile('./db.json', function (err, data) {
-        if( err ){
-            console.log( "文件读取错误" );
-        }else {
-            let json = JSON.parse(data);
+app.get("/jimapi/build/:id",  async(req, res) => {
 
-            let headerCode = json.webList[0].headerCode.replace(new RegExp(/(pixel)/g), json.list[0].pixel);
-            let footerCode = json.webList[0].footerCode
+    try {
+        const db=await getDb()
+        const list = db.list.find(v=>v.id===parseInt(req.params.id))
 
-            let btag = json.list[0].url.slice(json.list[0].url.indexOf('btag'))
-            let code = json.webList[1].code.replace(/pixel/, json.list[0].pixel.toString() )
-                .replace(/tokens/, json.list[0].token.toString())
-                .replace(/btag=/, btag);
+        if(!list){
+            return  res.status(404).end()
+        }
+        let githubStr = "direct:" + list.githubUrl + "#main"
 
-            deleteFolderRecursive('./file');
-            compressing.zip.uncompress('./wheel5.zip', './file')
-                .then(() => {
+        download(
+            githubStr,
+            dir,
+            { clone: true },
+            function (err) {
+                if( err ){
+                    res.json({
+                        code:'200',
+                        msg:'github下载失败'
+                    });
+                    // console.log( "github下载失败" );
+                }else {
+                    const codeList = db.webCode.find(v=>v.id===parseInt(list.codeId))
+                    let headerCode = codeList.headerCode.replace(new RegExp(/(pixel)/g), list.pixel);
+                    let footerCode = codeList.footerCode
+
+                    let btag = list.url.slice(list.url.indexOf('btag'))
+                    let code = codeList.code.replace(/pixel/, list.pixel.toString() )
+                        .replace(/tokens/, list.token.toString())
+                        .replace(/btag=/, btag);
+
+                    // deleteFolderRecursive('./file');
+                    // compressing.zip.uncompress('./wheel5.zip', './file')
+                    //     .then(() => {
 
                     // 异步读文件方法
-                    fs.readFile( "./file/wheel5/index.html", "utf-8", function( err, data ){
+                    fs.readFile( "./file/index.html", "utf-8", function( err, data ){
                         if( err ){
                             console.log( "文件读取错误" );
                         }else {
                             let str = data.replace(/<\/head>/, headerCode + '</head>').replace(/<\/html>/, footerCode + '</html>');
                             // 发送HTTP响应
-                            fs.writeFile('./file/wheel5/index.html', str, 'utf8', function(err) {
+                            fs.writeFile('./file/index.html', str, 'utf8', function(err) {
                                 if (err) throw err;
                                 console.log('index HTML file has been updated!');
 
@@ -71,7 +100,7 @@ app.get("/jimapi/build",  (req, res) => {
                                 archive.pipe(output);
 
                                 // 第四步，压缩目录到压缩包中
-                                archive.directory('./file/wheel5/', 'lander');
+                                archive.directory('./file/', 'lander');
 
                                 // 第五步，完成压缩
                                 archive.finalize();
@@ -100,16 +129,362 @@ app.get("/jimapi/build",  (req, res) => {
                             });
                         }
                     } )
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-
-        }
-    });
-
+                    // })
+                    // .catch(err => {
+                    //     console.log(err);
+                    // });
+                }
+            }
+        );
+    }catch (err){
+        res.status(500).json({
+            error:err.message
+        })
+    }
+    // fs.readFile('./db.json', function (err, data) {
+    //     if( err ){
+    //         console.log( "文件读取错误" );
+    //     }else {
+    //         let json = JSON.parse(data);
+    //         let githubStr = "direct:" + json.list[0].githubUrl + "#main"
+    //         download(
+    //             githubStr,
+    //             dir,
+    //             { clone: true },
+    //             function (err) {
+    //                 if( err ){
+    //                     console.log( "github下载失败" );
+    //                 }else {
+    //                     let headerCode = json.webList[0].headerCode.replace(new RegExp(/(pixel)/g), json.list[0].pixel);
+    //                     let footerCode = json.webList[0].footerCode
+    //
+    //                     let btag = json.list[0].url.slice(json.list[0].url.indexOf('btag'))
+    //                     let code = json.webList[1].code.replace(/pixel/, json.list[0].pixel.toString() )
+    //                         .replace(/tokens/, json.list[0].token.toString())
+    //                         .replace(/btag=/, btag);
+    //
+    //                     // deleteFolderRecursive('./file');
+    //                     // compressing.zip.uncompress('./wheel5.zip', './file')
+    //                     //     .then(() => {
+    //
+    //                         // 异步读文件方法
+    //                         fs.readFile( "./file/index.html", "utf-8", function( err, data ){
+    //                             if( err ){
+    //                                 console.log( "文件读取错误" );
+    //                             }else {
+    //                                 let str = data.replace(/<\/head>/, headerCode + '</head>').replace(/<\/html>/, footerCode + '</html>');
+    //                                 // 发送HTTP响应
+    //                                 fs.writeFile('./file/index.html', str, 'utf8', function(err) {
+    //                                     if (err) throw err;
+    //                                     console.log('index HTML file has been updated!');
+    //
+    //                                     const output = fs.createWriteStream(__dirname + '/lander.zip');
+    //                                     const archive = archiver('zip', {
+    //                                         zlib: { level: 9 }
+    //                                     });
+    //
+    //                                     // // 第三步，建立管道连接
+    //                                     archive.pipe(output);
+    //
+    //                                     // 第四步，压缩目录到压缩包中
+    //                                     archive.directory('./file/', 'lander');
+    //
+    //                                     // 第五步，完成压缩
+    //                                     archive.finalize();
+    //
+    //                                 });
+    //
+    //                                 fs.writeFile('./file/offer.html', code, 'utf8', function(err) {
+    //                                     if (err) throw err;
+    //                                     console.log('offer HTML file has been updated!');
+    //                                 });
+    //
+    //                                 const output = fs.createWriteStream(__dirname + '/offer.zip');
+    //                                 const archive = archiver('zip', {
+    //                                     zlib: { level: 9 }
+    //                                 });
+    //                                 // // 第三步，建立管道连接
+    //                                 archive.pipe(output);
+    //                                 // 第四步，压缩目录到压缩包中
+    //                                 archive.append(code, {name: 'offer.html'});// 文件路径
+    //                                 // 第五步，完成压缩
+    //                                 archive.finalize();
+    //
+    //                                 res.json({
+    //                                     code:'200',
+    //                                     msg:'构建成功'
+    //                                 });
+    //                             }
+    //                         } )
+    //                     // })
+    //                     // .catch(err => {
+    //                     //     console.log(err);
+    //                     // });
+    //                 }
+    //             }
+    //         );
+    //     }
+    // });
 });
 
+// 获取列表
+app.get("/jimapi/getPlace",async (req,res)=>{
+    try {
+        const db=await getDb()
+        res.json({
+            code:'200',
+            msg:'查询成功',
+            data:db.list
+        });
+        // res.status(200).json(db.list)
+    }catch (err){
+        res.status(500).json({
+            error:err.message
+        })
+    }
+})
+
+// 查
+app.get("/jimapi/getPlace/:id",async (req,res)=>{
+    try {
+        const db=await getDb()
+        const list=db.list.find(v=>v.id===parseInt(req.params.id))
+
+        if(!list){
+            return  res.status(404).end()
+        }
+        res.status(200).json(list)
+    }catch (err){
+        res.status(500).json({
+            error:err.message
+        })
+    }
+})
+//增
+app.post("/jimapi/setPlace",async (req,res)=>{
+    try {
+        const list=req.body
+        // if(!list.title){
+        //     return res.status(422).json({
+        //         error:'title字段必须传入'
+        //     })
+        // }
+        const db=await getDb()
+        const lastList= db.list
+        list.id=lastList.length === 0 ? 1 : lastList.length + 1,
+            db.list.unshift(list)
+        await saveDb(db)
+        // res.status(200).json(list)
+        res.json({
+            code:'200',
+            msg:'添加成功'
+        });
+    }catch (err){
+        res.status(500).json({
+            error:err.message
+        })
+    }
+
+})
+// 改
+app.post("/jimapi/setPlace/:id",async (req,res)=>{
+    try{
+        const list=req.body
+        const db=await getDb()
+        const ret=db.list.find(v=>v.id===parseInt(req.params.id))
+        if(!ret){
+            res.status(404).end()
+        }
+        Object.assign(ret,list)
+        await saveDb(db)
+        res.status(200).json(ret)
+    }catch (err){
+        res.status(500).json({
+            error:err.message
+        })
+    }
+})
+//删
+app.delete("/jimapi/deletePlace/:id",async (req,res)=>{
+    try{
+        const listId=parseInt(req.params.id)
+        const db=await getDb()
+        const index=db.list.findIndex(v=>v.id===listId)
+        if(index===-1){
+            return res.status(404).end()
+        }
+        db.list.splice(index,1)
+        await saveDb(db)
+        res.status(200).send("删除成功")
+    }catch (err){
+
+    }
+})
+
+
+// 获取列表
+app.get("/jimapi/getCode",async (req,res)=>{
+    try {
+        const db=await getDb()
+        res.json({
+            code:'200',
+            msg:'查询成功',
+            data:db.webCode
+        });
+        // res.status(200).json(db.list)
+    }catch (err){
+        res.status(500).json({
+            error:err.message
+        })
+    }
+})
+// 查
+app.get("/jimapi/getCode/:id",async (req,res)=>{
+    try {
+        const db=await getDb()
+        const list=db.webCode.find(v=>v.id===parseInt(req.params.id))
+
+        if(!list){
+            return  res.status(404).end()
+        }
+        res.status(200).json(list)
+    }catch (err){
+        res.status(500).json({
+            error:err.message
+        })
+    }
+})
+//增
+app.post("/jimapi/setCode",async (req,res)=>{
+    try {
+        const list = req.body
+        // if(!list.title){
+        //     return res.status(422).json({
+        //         error:'title字段必须传入'
+        //     })
+        // }
+        const db = await getDb()
+        const lastList= db.webCode
+        list.id = lastList.length === 0 ? 1 : lastList.length + 1,
+            db.webCode.push(list)
+        await saveDb(db)
+        // res.status(200).json(list)
+        res.json({
+            code:'200',
+            msg:'添加成功'
+        });
+    }catch (err){
+        res.status(500).json({
+            error:err.message
+        })
+    }
+
+})
+// 改
+app.post("/jimapi/setCode/:id",async (req,res)=>{
+    try{
+        const list=req.body
+        const db=await getDb()
+        const ret=db.webCode.find(v=>v.id===parseInt(req.params.id))
+        if(!ret){
+            res.status(404).end()
+        }
+        Object.assign(ret,list)
+        await saveDb(db)
+        res.status(200).json(ret)
+    }catch (err){
+        res.status(500).json({
+            error:err.message
+        })
+    }
+})
+//删
+app.delete("/jimapi/deleteCode/:id",async (req,res)=>{
+    try{
+        const listId=parseInt(req.params.id)
+        const db=await getDb()
+        const index=db.webCode.findIndex(v=>v.id===listId)
+        if(index===-1){
+            return res.status(404).end()
+        }
+        db.webCode.splice(index,1)
+        await saveDb(db)
+        res.status(200).send("删除成功")
+    }catch (err){
+
+    }
+})
+
+// app.use("/jimapi/webTable",  (req, res) => {
+//     var params = req.body
+//
+//     console.log(params)
+//     fs.readFile('./db.json', function (err, data) {
+//         let json = JSON.parse(data);
+//
+//         json.list[0] = params
+//
+//         fs.writeFile('./db.json', JSON.stringify(json), 'utf8', function(err) {
+//             if (err) throw err;
+//         })
+//     })
+//     res.json({
+//         code:'200',
+//         msg:'添加成功'
+//     });
+// })
+
+app.use("/jimapi/webGroup",  (req, res) => {
+    var params = req.body
+
+    console.log(params)
+    fs.readFile('./db.json', function (err, data) {
+        let json = JSON.parse(data);
+        let id = json.webGroup.length
+        params.id = id
+        json.webGroup.push(params)
+
+        fs.writeFile('./db.json', JSON.stringify(json), 'utf8', function(err) {
+            if (err) throw err;
+        })
+    })
+    res.json({
+        code:'200',
+        msg:'添加成功'
+    });
+})
+
+// 文件上传接口
+// 配置路径和文件名
+const storage = multer.diskStorage({
+    //上传文件到服务器的存储位置
+    destination: 'img',
+    filename: function (req, file, callback) {
+        //上传的文件信息
+        console.log('file', file)
+        /**
+         * file {
+         fieldname: 'file',
+         originalname: 'JRMW5Y~E5B%UO4$EZ)[)XLR.png',
+         encoding: '7bit',
+         mimetype: 'image/png'
+         }
+         */
+            // 将字符串分割成为数组，以点.的形式进行分割。返回的是一个数组
+        var fileFormat = (file.originalname).split('.')
+        // 获取时间戳
+        var filename = new Date().getTime()
+        // 文件的命名为：时间戳 + 点 + 文件的后缀名
+        callback(null, file.originalname)
+    }
+})
+const upload = multer({
+    storage
+})
+app.use('/jimapi/upload', upload.single('file'), (req, res) => {
+
+    res.send({ code:'200', msg:'上传成功',url: 'img/' + req.file.filename})
+})
 // app.get('/jimapi/:filename', function(req, res){
 //
 //     console.log(req.params.filename)
@@ -133,14 +508,6 @@ app.use("/jimapi/lander",(req,response,next)=>{
         'Content-Disposition': 'attachment; filename=' + fileName
     });
     f.pipe(response);
-    // if(!fs.existsSync(filePath)){
-    //     return res.send({code:"200",message:"成功"})
-    // }
-    // res.status(200).download(filePath,fileName,(err)=>{
-    //     if(err){
-    //         res.send({code:"400",message:"server err"})
-    //     }
-    // })
 })
 
 app.use("/jimapi/offer",(req,response,next)=>{
@@ -153,14 +520,7 @@ app.use("/jimapi/offer",(req,response,next)=>{
         'Content-Disposition': 'attachment; filename=' + fileName
     });
     f.pipe(response);
-    // if(!fs.existsSync(filePath)){
-    //     return res.send({code:"200",message:"成功"})
-    // }
-    // res.status(200).download(filePath,fileName,(err)=>{
-    //     if(err){
-    //         res.send({code:"400",message:"server err"})
-    //     }
-    // })
+
 })
 
 function deleteFolderRecursive(path) {
@@ -176,23 +536,6 @@ function deleteFolderRecursive(path) {
         fs.rmdirSync(path);
     }
 }
-// 异步读文件方法fs.readFile( "./file/wheel5/index.html", "utf-8", function( err, data ){
-//     if( err ){
-//         console.log( "文件读取错误" );
-//     }else {
-//         console.log(data.toString().indexOf('</head>'));
-//
-//
-//
-//         // let str = data.replace(/<\/head>/, 'A new line of text: Hello world!</head>');
-//         // // 发送HTTP响应
-//         // fs.writeFile('./file/wheel5/index.html', str, 'utf8', function(err) {
-//         //     if (err) throw err;
-//         //     console.log('HTML file has been updated!');
-//         // });
-//     }
-// } )
-
 
 app.post("/jimapi/getdefhref",  (req, res) => {
     res.json({ url: "https://tracker.apostarde.com/link?btag=50921004_290207" });
