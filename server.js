@@ -9,9 +9,9 @@ const compressing = require('compressing');
 const download = require("download-git-repo");
 const path = require("path");
 const rimraf = require("rimraf");
+const axios = require('axios');
+const { v4: uuidv4 } = require('uuid');
 
-const dir = path.join(process.cwd(), "file"); //这里可以自定义下载的地址
-rimraf.sync(dir, {});  //在下载前需要保证路径下没有同名文件
 // const https = require('https');
 // const fs = require('fs');
 // let options = {
@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({extended : true}))
 
 const multer = require('multer');
 const {getDb,saveDb} =require('./db')
-
+const FormData = require('form-data');
 
 // 处理application/x-www-form-urlencoded内容格式的请求体
 // app.use(bodyParser.urlencoded({extended: false}));
@@ -41,19 +41,369 @@ const {getDb,saveDb} =require('./db')
 
 const port = 4000;
 
+app.use('/jimapi/loginBinom', async (req, res) => {
+    try {
+        const response = await axios.post('https://loopfrom.com/api/user/sign_in',{"login":"jim","password":"TPJgu6sFSxq8arzG"});
+        console.log(response.headers['set-cookie'])
+        let setCookie = response.headers['set-cookie']
+        let Authorization = setCookie[0].split(' ')[0]
+        let Binom = setCookie[1].split(' ')[0]
+        const db = await getDb()
+        db.Authorization = Authorization
+        db.Binom = Binom
+
+        // const language = await axios.get('https://loopfrom.com/api/language/list',
+        //     {
+        //         headers:{
+        //             'Cookie': db.Authorization+db.Binom,
+        //         },
+        //     }
+        // );
+        const groups = await axios.get('https://loopfrom.com/api/groups/landings',
+            {
+                headers:{
+                    'Cookie': db.Authorization+db.Binom,
+                },
+            }
+        );
+        const campaigns = await axios.get('https://loopfrom.com/api/groups/campaigns',
+            {
+                headers:{
+                    'Cookie': db.Authorization+db.Binom,
+                },
+            }
+        );
+
+        // console.log(campaigns)
+
+        const domains = await axios.get('https://loopfrom.com/api/domains',
+            {
+                headers:{
+                    'Cookie': db.Authorization+db.Binom,
+                },
+            }
+        )
 
 
+        // console.log(domains)
+            // db.language = language
+        db.groupsArr = groups.data
+        db.domainsArr = domains.data
+        db.campaignsArr = campaigns.data
+
+        await saveDb(db)
+
+        res.json({
+            code:'200',
+            msg:'Binom登录成功'
+        });
+
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Something went wrong!');
+    }
+});
+app.use('/jimapi/getLanguage', async (req, res) => {
+    try {
+        const db = await getDb()
+        const response = await axios.get('https://loopfrom.com/api/language/list',
+            {
+                headers:{
+                    'Cookie': db.Authorization+db.Binom,
+                },
+            }
+        );
+
+        console.log(response)
+        res.json({
+            code:'200',
+            msg:'Binom登录成功'
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Something went wrong!');
+    }
+})
+app.use('/jimapi/getGroups', async (req, res) => {
+    try {
+        const db = await getDb()
+        const response = await axios.get('https://loopfrom.com/api/groups/landings',
+            {
+                headers:{
+                    'Cookie': db.Authorization+db.Binom,
+                },
+            }
+        );
+        console.log(response)
+        res.json({
+            code:'200',
+            msg:'Binom登录成功'
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Something went wrong!');
+    }
+})
+
+app.use('/jimapi/uploadTest', async (req, res) => {
+    try {
+        const db = await getDb()
+        let uuid = uuidv4();
+
+        const readStream = fs.createReadStream( 'lander.zip');
+        let formData = new FormData();
+
+        formData.append('file', readStream, {
+            filename: 'lander.zip',
+            contentType: 'application/zip'
+        });
+
+        const response = await axios.post('https://loopfrom.com/api/landing/'+uuid+'/upload',
+            formData,
+            {
+                headers:{
+                    'Accept-Encoding':'gzip, deflate, br, zstd',
+                    'Content-Type': 'multipart/form-data; boundary=----' + new Date().getTime(),
+                    'Cookie': db.Authorization+db.Binom,
+                },
+            }
+        );
+
+        console.log(response)
+
+        res.json({
+            code:'200',
+            msg:'成功'
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Something went wrong!');
+    }
+})
+async function releaseFun (db,list,zip,id,res) {
+    try {
+        let uuid = uuidv4();
+        let formData = new FormData();
+        if (zip === 'offer'){
+            const readStream = fs.createReadStream(path.join(process.cwd(), "file/offer.html"));
+            formData.append('file', readStream, {
+                filename: 'index.html',
+                contentType: 'text/html'
+            });
+        }else {
+
+            const readStream = fs.createReadStream(path.join(process.cwd(), "lander.zip"));
+
+            formData.append('file', readStream, {
+                filename: 'lander.zip',
+                contentType: 'application/zip'
+            });
+        }
+
+        const response = await axios.post('https://loopfrom.com/api/landing/'+uuid+'/upload',
+            formData,
+            {
+                headers:{
+                    'Accept-Encoding':'gzip, deflate, br, zstd',
+                    'Content-Type': 'multipart/form-data; boundary=----' + new Date().getTime(),
+                    'Cookie': db.Authorization+db.Binom,
+                },
+            }
+        );
+
+        let obj = {
+            groupUuid:list.deliveryTeamNumber,
+            languageCode : "",
+            name : list.describe + ' - ' + zip,
+            path :response.data.landing_file
+        }
+
+        const release = await axios.post('https://loopfrom.com/api/landing/integrated',
+            obj,
+        {
+            headers:{
+                'Cookie': db.Authorization+db.Binom,
+            },
+        })
+
+        const db2 = await getDb()
+        const list2 = db2.list.find(v=>v.id===parseInt(id))
+        list2[zip + '_file'] = response.data.landing_file
+        list2[zip + '_id'] = release.data.id
+
+        await saveDb(db2)
+
+        // if (release){
+        //     return true
+        // }else {
+        //     return false
+        // }
+
+    } catch (error) {
+
+        return false
+    }
+}
+app.use('/jimapi/landingUpload', async (req, res) => {
+    try {
+
+        const db = await getDb()
+
+        let uuid = uuidv4();
+
+        const readStream = fs.createReadStream(path.join(process.cwd(), "lander.zip"));
+
+        let formData = new FormData();
+
+        formData.append('file', readStream, {
+            filename: 'lander.zip',
+            contentType: 'application/zip'
+        });
+
+        const response = await axios.post('https://loopfrom.com/api/landing/'+uuid+'/upload',
+            formData,
+            {
+                headers:{
+                    'Accept-Encoding':'gzip, deflate, br, zstd',
+                    'Content-Type': 'multipart/form-data; boundary=----' + new Date().getTime(),
+                    'Cookie': db.Authorization+db.Binom,
+                },
+            }
+        );
+
+        res.json({
+            code:'200',
+            msg:'Binom登录成功'
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Something went wrong!');
+    }
+})
+app.use('/jimapi/integrated', async (req, res) => {
+    try {
+        const db = await getDb()
+        const response = await axios.get('https://loopfrom.com/api/landing/integrated',
+            {
+                headers:{
+                    groupUuid: null,
+                    languageCode: "",
+                    name: "test1",
+                    path: "landers/09be6adc-2801-41be-b589-fccb5e1b795d/index.html",
+                },
+            }
+        );
+
+        console.log(response)
+        res.json({
+            code:'200',
+            msg:'Binom登录成功'
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Something went wrong!');
+    }
+})
 app.get("/jimapi/", (req, res) => res.send("Hello World!"));
-app.get("/jimapi/build/:id",  async(req, res) => {
+app.get("/jimapi/build/:id",  async (req, res) => {
+    const lander = path.join(process.cwd(), "lander.zip"); //这里可以自定义下载的地址
+    await rimraf.sync(lander, {});
+
+    const offer = path.join(process.cwd(), "offer.zip"); //这里可以自定义下载的地址
+    await rimraf.sync(offer, {});
+
+    const offerHtml = path.join(process.cwd(), "file/offer.html"); //这里可以自定义下载的地址
+    await rimraf.sync(offerHtml, {});  //在下载前需要保证路径下没有同名文件
+
+    const dir = path.join(process.cwd(), "file/wheel"); //这里可以自定义下载的地址
+    await rimraf.sync(dir, {});  //在下载前需要保证路径下没有同名文件
+
+
 
     try {
-        const db=await getDb()
+        const db = await getDb()
         const list = db.list.find(v=>v.id===parseInt(req.params.id))
 
         if(!list){
-            return  res.status(404).end()
+            res.json({
+                code:'400',
+                msg:'获取失败'
+            });
+            return
         }
         let githubStr = "direct:" + list.githubUrl + "#main"
+
+        const codeList = db.webCode.find(v=>v.id===parseInt(list.codeId))
+        let headerCode = codeList.headerCode.replace(new RegExp(/(editPixelId)/g), list.pixel);
+        let footerCode = codeList.footerCode
+
+        let btag = list.url.slice(list.url.indexOf('btag'))
+        let code = codeList.code.replace(/editPixelId/, list.pixel.toString() )
+            .replace(/tokens/, list.token.toString())
+            .replace(/btag=/, btag);
+
+        let offerPath = path.join(process.cwd(), "file/offer.html")
+        let offerIsOk = false
+        fs.writeFile( offerPath, code, 'utf8', function(err) {
+            if (err) throw err;
+            console.log('offer HTML file has been updated!');
+            // releaseFun(db,list,'offer')
+            // let uuid = uuidv4();
+            // let formData = new FormData();
+            //
+            // const readStream = fs.createReadStream(path.join(process.cwd(), "file/offer.html"));
+            // formData.append('file', readStream, {
+            //     filename: 'index.html',
+            //     contentType: 'text/html'
+            // });
+            // const response = await axios.post('https://loopfrom.com/api/landing/'+uuid+'/upload',
+            //     formData,
+            //     {
+            //         headers:{
+            //             'Accept-Encoding':'gzip, deflate, br, zstd',
+            //             'Content-Type': 'multipart/form-data; boundary=----' + Date.now().toString(16),
+            //             'Cookie': db.Authorization+db.Binom,
+            //         },
+            //     }
+            // );
+            // console.log(response)
+            // list['offer_file'] = response.data.landing_file
+            //
+            // let obj = {
+            //     groupUuid:list.deliveryTeamNumber,
+            //     languageCode : "",
+            //     name : list.describe + ' - offer',
+            //     path :response.data.landing_file
+            // }
+            //
+            // const release = await axios.post('https://loopfrom.com/api/landing/integrated',
+            //     obj,
+            //     {
+            //         headers:{
+            //             'Cookie': db.Authorization+db.Binom,
+            //         },
+            //     })
+
+            // const output = fs.createWriteStream(__dirname + '/offer.zip');
+            // const archive = archiver('zip', {
+            //     zlib: { level: 9 }
+            // });
+            // // // 第三步，建立管道连接
+            // archive.pipe(output);
+            // // 第四步，压缩目录到压缩包中
+            // archive.append(code, {name: 'offer.html'});// 文件路径
+            // // 第五步，完成压缩
+            // archive.finalize()
+            //
+            // archive.on('end', function(res) {
+            //     const file = 'offer.zip';
+            //     fs.access(file, fs.constants.F_OK, (err) => {
+            //
+            //         err ? console.log("offer文件不存在") : releaseFun(db,list,'offer')
+            //     });
+            // });
+        })
 
         download(
             githubStr,
@@ -62,32 +412,24 @@ app.get("/jimapi/build/:id",  async(req, res) => {
             function (err) {
                 if( err ){
                     res.json({
-                        code:'200',
+                        code:'400',
                         msg:'github下载失败'
                     });
-                    // console.log( "github下载失败" );
                 }else {
-                    const codeList = db.webCode.find(v=>v.id===parseInt(list.codeId))
-                    let headerCode = codeList.headerCode.replace(new RegExp(/(pixel)/g), list.pixel);
-                    let footerCode = codeList.footerCode
-
-                    let btag = list.url.slice(list.url.indexOf('btag'))
-                    let code = codeList.code.replace(/pixel/, list.pixel.toString() )
-                        .replace(/tokens/, list.token.toString())
-                        .replace(/btag=/, btag);
 
                     // deleteFolderRecursive('./file');
                     // compressing.zip.uncompress('./wheel5.zip', './file')
                     //     .then(() => {
 
                     // 异步读文件方法
-                    fs.readFile( "./file/index.html", "utf-8", function( err, data ){
+
+                    fs.readFile( path.join(process.cwd(), "file/wheel/index.html"), "utf-8", function( err, data ){
                         if( err ){
                             console.log( "文件读取错误" );
                         }else {
                             let str = data.replace(/<\/head>/, headerCode + '</head>').replace(/<\/html>/, footerCode + '</html>');
                             // 发送HTTP响应
-                            fs.writeFile('./file/index.html', str, 'utf8', function(err) {
+                            fs.writeFile(path.join(process.cwd(), "file/wheel/index.html"), str, 'utf8', function(err) {
                                 if (err) throw err;
                                 console.log('index HTML file has been updated!');
 
@@ -95,47 +437,72 @@ app.get("/jimapi/build/:id",  async(req, res) => {
                                 const archive = archiver('zip', {
                                     zlib: { level: 9 }
                                 });
-
                                 // // 第三步，建立管道连接
                                 archive.pipe(output);
-
                                 // 第四步，压缩目录到压缩包中
-                                archive.directory('./file/', 'lander');
-
+                                archive.directory(path.join(process.cwd(), "file/wheel/"), 'lander');
                                 // 第五步，完成压缩
-                                archive.finalize();
 
-                            });
+                                archive.finalize()
 
-                            fs.writeFile('./file/offer.html', code, 'utf8', function(err) {
-                                if (err) throw err;
-                                console.log('offer HTML file has been updated!');
-                            });
-
-                            const output = fs.createWriteStream(__dirname + '/offer.zip');
-                            const archive = archiver('zip', {
-                                zlib: { level: 9 }
-                            });
-                            // // 第三步，建立管道连接
-                            archive.pipe(output);
-                            // 第四步，压缩目录到压缩包中
-                            archive.append(code, {name: 'offer.html'});// 文件路径
-                            // 第五步，完成压缩
-                            archive.finalize();
-
-                            res.json({
-                                code:'200',
-                                msg:'构建成功'
+                                res.json({
+                                    code:'200',
+                                    msg:'代码生成成功',
+                                });
+                                // archive.on('end', async function(resArchive) {
+                                //     const file = 'lander.zip';
+                                //     fs.access(file, fs.constants.F_OK, async (err) => {
+                                //         if (err) throw err;
+                                //         let uuid = uuidv4();
+                                //
+                                //         const readStream = fs.createReadStream( path.join(process.cwd(), "lander.zip"));
+                                //         let formData = new FormData();
+                                //
+                                //         formData.append('file', readStream, {
+                                //             filename: 'lander.zip',
+                                //             contentType: 'application/zip'
+                                //         });
+                                //
+                                //         const response = await axios.post('https://loopfrom.com/api/landing/'+uuid+'/upload',
+                                //             formData,
+                                //             {
+                                //                 headers:{
+                                //                     'Accept-Encoding':'gzip, deflate, br, zstd',
+                                //                     'Content-Type': 'multipart/form-data; boundary=----' + Date.now().toString(16),
+                                //                     'Cookie': db.Authorization+db.Binom,
+                                //                 },
+                                //             }
+                                //         );
+                                //         console.log(response)
+                                //
+                                //         list['lander_file'] = response.data.landing_file
+                                //
+                                //         await saveDb(db)
+                                //
+                                //         let obj = {
+                                //             groupUuid:list.deliveryTeamNumber,
+                                //             languageCode : "",
+                                //             name : list.describe + ' - lander',
+                                //             path :response.data.landing_file
+                                //         }
+                                //
+                                //         const release = await axios.post('https://loopfrom.com/api/landing/integrated',
+                                //             obj,
+                                //             {
+                                //                 headers:{
+                                //                     'Cookie': db.Authorization+db.Binom,
+                                //                 },
+                                //             })
+                                //     });
+                                // });
                             });
                         }
-                    } )
-                    // })
-                    // .catch(err => {
-                    //     console.log(err);
-                    // });
+                    })
+
                 }
             }
         );
+
     }catch (err){
         res.status(500).json({
             error:err.message
@@ -391,7 +758,10 @@ app.post("/jimapi/setCode/:id",async (req,res)=>{
         }
         Object.assign(ret,list)
         await saveDb(db)
-        res.status(200).json(ret)
+        res.json({
+            code:'200',
+            msg:'修改成功'
+        });
     }catch (err){
         res.status(500).json({
             error:err.message
@@ -409,30 +779,62 @@ app.delete("/jimapi/deleteCode/:id",async (req,res)=>{
         }
         db.webCode.splice(index,1)
         await saveDb(db)
-        res.status(200).send("删除成功")
+        res.json({
+            code:'200',
+            msg:'删除成功'
+        });
     }catch (err){
 
     }
 })
 
-// app.use("/jimapi/webTable",  (req, res) => {
-//     var params = req.body
-//
-//     console.log(params)
-//     fs.readFile('./db.json', function (err, data) {
-//         let json = JSON.parse(data);
-//
-//         json.list[0] = params
-//
-//         fs.writeFile('./db.json', JSON.stringify(json), 'utf8', function(err) {
-//             if (err) throw err;
-//         })
-//     })
-//     res.json({
-//         code:'200',
-//         msg:'添加成功'
-//     });
-// })
+app.use("/jimapi/groupsArr", async (req, res) => {
+    try {
+        const db=await getDb()
+        res.json({
+            code:'200',
+            msg:'查询成功',
+            data:db.groupsArr
+        });
+        // res.status(200).json(db.list)
+    }catch (err){
+        res.status(500).json({
+            error:err.message
+        })
+    }
+})
+
+app.use("/jimapi/campaignsArr", async (req, res) => {
+    try {
+        const db=await getDb()
+        res.json({
+            code:'200',
+            msg:'查询成功',
+            data:db.campaignsArr
+        });
+        // res.status(200).json(db.list)
+    }catch (err){
+        res.status(500).json({
+            error:err.message
+        })
+    }
+})
+
+app.use("/jimapi/domainsArr", async (req, res) => {
+    try {
+        const db=await getDb()
+        res.json({
+            code:'200',
+            msg:'查询成功',
+            data:db.domainsArr
+        });
+        // res.status(200).json(db.list)
+    }catch (err){
+        res.status(500).json({
+            error:err.message
+        })
+    }
+})
 
 app.use("/jimapi/webGroup",  (req, res) => {
     var params = req.body
@@ -498,31 +900,423 @@ app.use('/jimapi/upload', upload.single('file'), (req, res) => {
 //         }
 //     });
 // });
-app.use("/jimapi/lander",(req,response,next)=>{
-    const fs = require('fs')
-    const fileName = 'lander'
-    const filePath = __dirname + '/lander.zip'
-    var f = fs.createReadStream(filePath);
-    response.writeHead(200, {
-        'Content-Type': 'application/force-download',
-        'Content-Disposition': 'attachment; filename=' + fileName
-    });
-    f.pipe(response);
+app.use("/jimapi/release/:id",async (req,res,next)=>{
+    // const fs = require('fs')
+    // const fileName = 'lander'
+    // const filePath = __dirname + '/lander.zip'
+    // var f = fs.createReadStream(filePath);
+    // response.writeHead(200, {
+    //     'Content-Type': 'application/force-download',
+    //     'Content-Disposition': 'attachment; filename=' + fileName
+    // });
+    // f.pipe(response);
+
+
+    // const db = await getDb()
+    // const list = db.list.find(v=>v.id===parseInt(req.params.id))
+    //
+    // let lander = releaseFun(db,list,'lander',req.params.id)
+    //
+    // if (lander){
+    //
+    //     let offer = releaseFun(db,list,'offer',req.params.id)
+    //
+    //     if (offer){
+    //         res.json({
+    //             code:'200',
+    //             msg:'发布成功'
+    //         });
+    //     }else {
+    //         res.json({
+    //             code:'200',
+    //             msg:'发布失败'
+    //         });
+    //     }
+    // }else {
+    //     res.json({
+    //         code:'200',
+    //         msg:'发布失败'
+    //     });
+    // }
+
+    // if (lander){
+    //     res.json({
+    //         code:'200',
+    //         msg:'lander添加成功'
+    //     });
+    // }else {
+    //     res.json({
+    //         code:'400',
+    //         msg:'lander添加失败'
+    //     });
+    // }
+})
+app.use("/jimapi/lander/:id",async (req,res,next)=>{
+    // const fs = require('fs')
+    // const fileName = 'lander'
+    // const filePath = __dirname + '/lander.zip'
+    // var f = fs.createReadStream(filePath);
+    // response.writeHead(200, {
+    //     'Content-Type': 'application/force-download',
+    //     'Content-Disposition': 'attachment; filename=' + fileName
+    // });
+    // f.pipe(response);
+
+    // const db = await getDb()
+    // const list = db.list.find(v=>v.id===parseInt(req.params.id))
+    //
+    // let lander = releaseFun(db,list,'lander',req.params.id)
+    // if (lander){
+    //     res.json({
+    //         code:'200',
+    //         msg:'lander添加成功'
+    //     });
+    // }else {
+    //     res.json({
+    //         code:'400',
+    //         msg:'lander添加失败'
+    //     });
+    // }
+
+
+    try {
+        const lander = path.join(process.cwd(), "lander.zip"); //这里可以自定义下载的地址
+        await rimraf.sync(lander, {});
+
+        const dir = path.join(process.cwd(), "file/wheel"); //这里可以自定义下载的地址
+        await rimraf.sync(dir, {});  //在下载前需要保证路径下没有同名文件
+
+        const db = await getDb()
+        const list = db.list.find(v=>v.id===parseInt(req.params.id))
+
+        if(!list){
+            res.json({
+                code:'400',
+                msg:'获取失败'
+            });
+            return
+        }
+        let githubStr = "direct:" + list.githubUrl + "#main"
+
+        const codeList = db.webCode.find(v=>v.id===parseInt(list.codeId))
+        let headerCode = codeList.headerCode.replace(new RegExp(/(editPixelId)/g), list.pixel);
+        let footerCode = codeList.footerCode
+
+        download(
+            githubStr,
+            dir,
+            { clone: true },
+            function (err) {
+                if( err ){
+                    res.json({
+                        code:'400',
+                        msg:'github下载失败'
+                    });
+                }else {
+
+                    fs.readFile( path.join(process.cwd(), "file/wheel/index.html"), "utf-8",  function( err, data ){
+                        if( err ){
+                            console.log( "文件读取错误" );
+                        }else {
+                            let str = data.replace(/<\/head>/, headerCode + '</head>').replace(/<\/html>/, footerCode + '</html>');
+                            // 发送HTTP响应
+                            fs.writeFile(path.join(process.cwd(), "file/wheel/index.html"), str, 'utf8',  function(err) {
+                                if (err) throw err;
+                                console.log('index HTML file has been updated!');
+
+                                const output = fs.createWriteStream(__dirname + '/lander.zip');
+                                const archive = archiver('zip', {
+                                    zlib: { level: 9 }
+                                });
+                                // // 第三步，建立管道连接
+                                archive.pipe(output);
+                                // 第四步，压缩目录到压缩包中
+                                archive.directory(path.join(process.cwd(), "file/wheel/"), 'lander');
+                                // 第五步，完成压缩
+
+                                archive.finalize()
+
+                                output.on('close',async () => {
+                                    console.log('压缩完成！')
+
+                                    let uuid = uuidv4();
+                                    let formData = new FormData();
+
+                                    const readStream = fs.createReadStream(path.join(process.cwd(), "lander.zip"));
+
+                                    formData.append('file', readStream, {
+                                        filename: 'lander.zip',
+                                        contentType: 'application/zip'
+                                    });
+
+                                    const response = await axios.post('https://loopfrom.com/api/landing/'+uuid+'/upload',
+                                        formData,
+                                        {
+                                            headers:{
+                                                'Accept-Encoding':'gzip, deflate, br, zstd',
+                                                'Content-Type': 'multipart/form-data; boundary=----' + new Date().getTime(),
+                                                'Cookie': db.Authorization+db.Binom,
+                                            },
+                                        }
+                                    );
+
+                                    let obj = {
+                                        groupUuid:list.deliveryTeamNumber,
+                                        languageCode : "",
+                                        name : list.describe + ' - lander',
+                                        path :response.data.landing_file
+                                    }
+
+                                    const release = await axios.post('https://loopfrom.com/api/landing/integrated',
+                                        obj,
+                                        {
+                                            headers:{
+                                                'Cookie': db.Authorization+db.Binom,
+                                            },
+                                        })
+
+                                    const db2 = await getDb()
+                                    const list2 = db2.list.find(v=>v.id===parseInt(req.params.id))
+                                    list2['lander_file'] = response.data.landing_file
+                                    list2['lander_id'] = release.data.id
+
+                                    await saveDb(db2)
+
+                                    res.json({
+                                        code:'200',
+                                        msg:'lander添加成功'
+                                    });
+                                }).on('error', (err) => {
+                                     console.error('压缩失败', err)
+                                })
+                            });
+                        }
+                    })
+
+                }
+            }
+        );
+
+    }catch (err){
+        res.json({
+            code:'400',
+            msg:'lander添加失败'
+        });
+    }
 })
 
-app.use("/jimapi/offer",(req,response,next)=>{
-    const fs = require('fs')
-    const fileName = 'offer'
-    const filePath = __dirname + '/offer.zip'
-    var f = fs.createReadStream(filePath);
-    response.writeHead(200, {
-        'Content-Type': 'application/force-download',
-        'Content-Disposition': 'attachment; filename=' + fileName
-    });
-    f.pipe(response);
+app.use("/jimapi/offer/:id", async(req,res,next)=>{
+    // const fs = require('fs')
+    // const fileName = 'offer'
+    // const filePath = __dirname + '/offer.zip'
+    // var f = fs.createReadStream(filePath);
+    // response.writeHead(200, {
+    //     'Content-Type': 'application/force-download',
+    //     'Content-Disposition': 'attachment; filename=' + fileName
+    // });
+    // f.pipe(response);
 
+    // const db = await getDb()
+    // const list = db.list.find(v=>v.id===parseInt(req.params.id))
+    //
+    // let offer = releaseFun(db,list,'lander',req.params.id)
+    // if (offer){
+    //     res.json({
+    //         code:'200',
+    //         msg:'offer添加成功'
+    //     });
+    // }else {
+    //     res.json({
+    //         code:'400',
+    //         msg:'offer添加失败'
+    //     });
+    // }
+
+    try {
+        const offer = path.join(process.cwd(), "offer.zip"); //这里可以自定义下载的地址
+        await rimraf.sync(offer, {});
+
+        const offerHtml = path.join(process.cwd(), "file/offer.html"); //这里可以自定义下载的地址
+        await rimraf.sync(offerHtml, {});  //在下载前需要保证路径下没有同名文件
+
+        const db = await getDb()
+        const list = db.list.find(v=>v.id===parseInt(req.params.id))
+
+        if(!list){
+            res.json({
+                code:'400',
+                msg:'获取失败'
+            });
+            return
+        }
+
+        const codeList = db.webCode.find(v=>v.id===parseInt(list.codeId))
+
+        let btag = list.url.slice(list.url.indexOf('btag'))
+        let code = codeList.code.replace(/editPixelId/, list.pixel.toString() )
+            .replace(/tokens/, list.token.toString())
+            .replace(/btag=/, btag);
+
+        let offerPath = path.join(process.cwd(), "file/offer.html")
+
+        fs.writeFile( offerPath, code, 'utf8', async function(err) {
+            if (err) throw err;
+            console.log('offer HTML file has been updated!');
+            let uuid = uuidv4();
+            let formData = new FormData();
+
+            const readStream = fs.createReadStream(path.join(process.cwd(), "file/offer.html"));
+            formData.append('file', readStream, {
+                filename: 'index.html',
+                contentType: 'text/html'
+            });
+
+            const response = await axios.post('https://loopfrom.com/api/landing/'+uuid+'/upload',
+                formData,
+                {
+                    headers:{
+                        'Accept-Encoding':'gzip, deflate, br, zstd',
+                        'Content-Type': 'multipart/form-data; boundary=----' + new Date().getTime(),
+                        'Cookie': db.Authorization+db.Binom,
+                    },
+                }
+            );
+
+            let obj = {
+                groupUuid:list.deliveryTeamNumber,
+                languageCode : "",
+                name : list.describe + ' - offer',
+                path :response.data.landing_file
+            }
+
+            const release = await axios.post('https://loopfrom.com/api/landing/integrated',
+                obj,
+                {
+                    headers:{
+                        'Cookie': db.Authorization+db.Binom,
+                    },
+                })
+
+            const db2 = await getDb()
+            const list2 = db2.list.find(v=>v.id===parseInt(req.params.id))
+            list2[ 'offer_file'] = response.data.landing_file
+            list2[ 'offer_id'] = release.data.id
+
+            await saveDb(db2)
+
+            res.json({
+                code:'200',
+                msg:'offer添加成功'
+            });
+        })
+
+    } catch (error) {
+        res.json({
+            code:'400',
+            msg:'offer添加失败'
+        });
+    }
 })
 
+// async function campaign (id) {
+app.use("/jimapi/campaign/:id",async(req,res,next)=>{
+    try {
+        const db = await getDb()
+        const list = db.list.find(v=>v.id===parseInt( req.params.id))
+        const domainUuid = db.domainsArr.find(v=>v.id===list.domainUuid)
+
+        if(!list){
+            res.json({
+                code:'400',
+                msg:'获取失败'
+            });
+            return
+        }
+        let obj = {
+            "name":  list.campaignName + ' ' + list.describe,
+            "key":  "",
+            "costModel":  "CPC",
+            "amount":  null,
+            "currency":  "USD",
+            "isAuto":  true,
+            "hideReferrerType":  "NONE",
+            "distributionType":  "NORMAL",
+            "groupUuid":  list.groupUuid,
+            "domainUuid":  list.domainUuid,
+            "rotationId":  null,
+            "hideReferrerDomainUuid":  null,
+            "trafficSourceId":  17,
+            "customRotation":  {
+                "defaultPaths":  [
+                    {
+                        "name":  "Path 1",
+                        "enabled":  true,
+                        "weight":  100,
+                        "landings":  [
+                            {
+                                "id":  list.lander_id,
+                                "enabled":  true,
+                                "weight":  100
+                            }
+                        ],
+                        "offers":  [
+                            {
+                                "offerId":  0,
+                                "campaignId":  0,
+                                "directUrl":  "https://"+ domainUuid.domain +"/"+list.offer_file+"?clickid={clickid}",
+                                "enabled":  true,
+                                "weight":  100
+                            }
+                        ]
+                    }
+                ],
+                "rules":  [
+
+                ]
+            },
+            "campaignSettings":  {
+                "s2sPostback":  null,
+                "postbackPercent":  100,
+                "trafficLossPercent":  0,
+                "payoutPercent":  100,
+                "ea":  100,
+                "lpPixel":  null
+            }
+        }
+
+        const campaign = await axios.post('https://loopfrom.com/api/campaign',
+            obj,
+            {
+                headers:{
+                    'Cookie': db.Authorization+db.Binom,
+                },
+            })
+
+        const campaignMsg = await axios.get('https://loopfrom.com/api/campaign/'+campaign.data.id,
+            {
+                headers:{
+                    'Cookie': db.Authorization+db.Binom,
+                },
+            })
+
+        list['campaign_id'] = campaign.data.id
+        list['campaign_key'] = campaignMsg.data.key
+        list['campaign_link'] = campaignMsg.data.link
+
+        await saveDb(db)
+
+        res.json({
+            code:'200',
+            msg:'Campaigns发布成功'
+        });
+    } catch (error) {
+        res.json({
+            code:'400',
+            msg:'Campaigns发布成功'
+        });
+    }
+})
+// }
 function deleteFolderRecursive(path) {
     if (fs.existsSync(path)) {
         fs.readdirSync(path).forEach(file => {

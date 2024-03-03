@@ -1,14 +1,64 @@
 {
   "list": [
     {
+      "describe": "",
+      "status": "",
+      "campaignName": "",
+      "landerName": "",
+      "deliveryType": "",
+      "trackPeople": "",
+      "deliveryTeamNumber": "",
+      "advertisingPrefix": "",
+      "s2s": "",
+      "startDate": "2024/03/02 14:38",
+      "area": "",
+      "areaName": "",
+      "promotionTargetPage": "",
+      "baseURL": "",
+      "keyPublicityDirections": "",
+      "promoteEquipmentGoals": "",
+      "promotionPeriod": "",
+      "pixel": "",
+      "token": "",
+      "url": "",
+      "githubUrl": "",
+      "codeId": "",
+      "id": 3
+    },
+    {
+      "describe": "钛动 转盘 kwai",
+      "status": "准备中",
+      "campaignName": "",
+      "landerName": "",
+      "deliveryType": "快手",
+      "trackPeople": "jim",
+      "deliveryTeamNumber": "jm",
+      "advertisingPrefix": "kw",
+      "s2s": "a",
+      "startDate": "2024/03/02 10:48",
+      "area": "",
+      "areaName": "",
+      "promotionTargetPage": "h",
+      "baseURL": "",
+      "keyPublicityDirections": "ho",
+      "promoteEquipmentGoals": "m",
+      "promotionPeriod": "a",
+      "pixel": "573552800584962140",
+      "token": "7X6YN9pCPVqaPXbXgXwm5K+bOAr6Y73UexkTFcYVEr4=",
+      "url": "https://betfrom.com?btag=kwatd_brhomh141-",
+      "githubUrl": "https://github.com/jimSemfoundry/workplace-14.git",
+      "codeId": 2,
+      "id": 2
+    },
+    {
       "id": 1,
-      "describe": "jesmon 足球 facebook",
+      "describe": "jesmon 足球 facebook test",
       "status": "正在运行",
       "campaignName": "brhoma-jmahfb-134",
       "landerName": "homa-jm-134",
       "deliveryType": "facebook",
       "trackPeople": 1,
-      "deliveryTeamNumber": 1,
+      "deliveryTeamNumber": "c0cef9c1-f9dc-461b-ac87-1f24e76b7562",
       "advertisingPrefix": 0,
       "s2s": 0,
       "startDate": "",
@@ -22,28 +72,47 @@
       "pixel": "913079263678605",
       "token": "EAAWnjZAHH4lkBOxGKSQdZAGb6nZBiUAwRvQ6rkeTWpOT9ZBdmtvhZBsr4B0GSbtKkuYnrs6KsLZCva9nI4qnPEQwqzChAZCZB2wSh1NeZAZADKgQW7AbZA92eJxcZAE7fvgxA8dSQeOTPZBdCoFaaky1to9YZCl71UwTxeUrStjdMvXCfaOBJiGjxgZCz0ZAfDWfRNQw1FUd7QZDZD",
       "url": "https://betfrom.com?btag=fbajm_brhomh134-",
-      "githubUrl": "https://github.com/jimSemfoundry/workplace-13.git",
-      "codeId": 2
+      "githubUrl": "https://github.com/jimSemfoundry/workplace-15.git",
+      "codeId": 1,
+      "groupUuid": "21f1f238-b8be-4193-b97a-0e1571aea1bd",
+      "domainUuid": "7e27a2a2-2d53-4759-805b-f44a351be678",
+      "offer": "landers/f26e64cb-e73a-4e5d-b654-335c6479da87/index.html",
+      "offer_id": 280,
+      "lander_file": "landers/587b33a4-5555-4621-b1e0-aad5982fe18e/index.html",
+      "lander_id": 279,
+      "campaign_id": 201,
+      "campaign_key": "15c29374d239bfc686af",
+      "campaign_link": "https://qmsadb.com/click?key=15c29374d239bfc686af",
+      "offer_file": "landers/2d74a71d-5b3e-4eec-803f-a32c3f997d32/index.html"
     }
   ],
   "webCode": [
     {
-      "title": "123",
+      "title": "faceBook1",
       "group": "faceBook",
-      "type": "offer",
-      "footerCode": "",
-      "headerCode": "",
-      "code": "<!DOCTYPE html>\n<html lang=\"en\" style=\"--sidebar-width: 300px;\">\n<head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>load</title>\n    <style>\n        .loading-container {\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            height: 100vh;\n        }\n\n        .loading-spinner {\n            border: 8px solid #f3f3f3;\n            /* Light gray */\n            border-top: 8px solid #3498db;\n            /* Blue */\n            border-radius: 50%;\n            width: 60px;\n            height: 60px;\n            animation: spin 1s linear infinite;\n        }\n\n        @keyframes spin {\n            0% {\n                transform: rotate(0deg);\n            }\n\n            100% {\n                transform: rotate(360deg);\n            }\n        }\n    </style>\n\n</head>\n\n<body>\n    <div class=\"loading-container\">\n        <div class=\"loading-spinner\"></div>\n    </div>\n</body>\n\n<script>\n    var clickid = \"\";\n    var cookie_data = {\n\n    };\n    let id = 'pixel';\n    let access_token = 'tokens';\n    let dt_url = \"https://betfrom.com/popup/registration?btag=\";\n\n\n    async function jump() {\n\n        var url = \"https://bs2s.semfoundry.com/api/BetfromADMonitor/setCookie\";\n        var data = {\n            key: clickid,\n            data: cookie_data\n        };\n        try {\n            var response = await sendPostRequest(url, data);\n\n        } catch (error) {\n            console.log(\"Error:\", error);\n            return;\n        }\n        var ref_url = dt_url + clickid;\n\n        window.location.href = ref_url\n    }\n\n     function getCookie(name) {\n        var cookies = document.cookie.split(\"; \");\n        for (var i = 0; i < cookies.length; i++) {\n            var cookie = cookies[i].split(\"=\");\n            if (cookie[0] === name) {\n                return cookies[i].substring(cookie[0].length+1);\n            }\n        }\n        return null;\n    }\n\n    async function sendPostRequest(url, data) {\n        return new Promise(function (resolve, reject) {\n            var xhr = new XMLHttpRequest();\n            xhr.open(\"POST\", url);\n            xhr.setRequestHeader(\"Content-Type\", \"application/json\");\n\n            xhr.addEventListener(\"load\", function () {\n                if (xhr.status === 200) {\n                    var response = xhr.responseText;\n                    resolve(response);\n                } else {\n                    reject(xhr.statusText);\n                }\n            });\n\n            xhr.addEventListener(\"error\", function () {\n                reject(\"Network error\");\n            });\n\n            xhr.send(JSON.stringify(data));\n        });\n    }\n\n    window.onload = async function () {\n\n        const urlParams = new URLSearchParams(window.location.search);\n        clickid = urlParams.get('clickid') ? urlParams.get('clickid') : \"\";\n        if (clickid === \"\") {\n            console.log(\"warning: find not clickid\");\n            return;\n        }\n\n        cookie_data = {\n            \"user_data\": {\n                \"client_user_agent\": navigator.userAgent,\n                \"fbc\": getCookie('_fbc'),\n                \"fbp\": getCookie('_fbp')\n            },\n            \"event_source_url\": getCookie('fb.currentHref'),\n            \"pixelid\": id,\n            \"access_token\": access_token,\n            \"__sem_type_name\": \"facebook-bi\",\n            \"__sem_type_verion\": \"2.0\"\n        };\n\n        await jump();\n\n    }\n</script>\n</html>",
-      "id": 3
+      "footerCode": "<script>\n  window.onload = function() {\n    document.cookie = \"fb.currentHref=\" + window.location.href + \"; path=/\";\n  }\n</script>",
+      "headerCode": "<script>\n  !function(f,b,e,v,n,t,s)\n  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?\n  n.callMethod.apply(n,arguments):n.queue.push(arguments)};\n  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';\n  n.queue=[];t=b.createElement(e);t.async=!0;\n  t.src=v;s=b.getElementsByTagName(e)[0];\n  s.parentNode.insertBefore(t,s)}(window, document,'script',\n  'https://connect.facebook.net/en_US/fbevents.js');\n  fbq('init', 'editPixelId');\n  fbq('track', 'PageView');\n</script>\n<noscript>\n  <img height=\"1\" width=\"1\" style=\"display:none\" src=\"https://www.facebook.com/tr?id=editPixelId&ev=PageView&noscript=1\"/>\n</noscript>",
+      "code": "<!DOCTYPE html>\n<html lang=\"en\" style=\"--sidebar-width: 300px;\">\n<head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>load</title>\n    <style>\n        .loading-container {\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            height: 100vh;\n        }\n\n        .loading-spinner {\n            border: 8px solid #f3f3f3;\n            /* Light gray */\n            border-top: 8px solid #3498db;\n            /* Blue */\n            border-radius: 50%;\n            width: 60px;\n            height: 60px;\n            animation: spin 1s linear infinite;\n        }\n\n        @keyframes spin {\n            0% {\n                transform: rotate(0deg);\n            }\n\n            100% {\n                transform: rotate(360deg);\n            }\n        }\n    </style>\n\n</head>\n\n<body>\n    <div class=\"loading-container\">\n        <div class=\"loading-spinner\"></div>\n    </div>\n</body>\n\n<script>\n    var clickid = \"\";\n    var cookie_data = {\n\n    };\n    let id = 'editPixelId';\n    let access_token = 'tokens';\n    let dt_url = \"https://betfrom.com/popup/registration?btag=\";\n\n\n    async function jump() {\n\n        var url = \"https://bs2s.semfoundry.com/api/BetfromADMonitor/setCookie\";\n        var data = {\n            key: clickid,\n            data: cookie_data\n        };\n        try {\n            var response = await sendPostRequest(url, data);\n\n        } catch (error) {\n            console.log(\"Error:\", error);\n            return;\n        }\n        var ref_url = dt_url + clickid;\n\n        window.location.href = ref_url\n    }\n\n     function getCookie(name) {\n        var cookies = document.cookie.split(\"; \");\n        for (var i = 0; i < cookies.length; i++) {\n            var cookie = cookies[i].split(\"=\");\n            if (cookie[0] === name) {\n                return cookies[i].substring(cookie[0].length+1);\n            }\n        }\n        return null;\n    }\n\n    async function sendPostRequest(url, data) {\n        return new Promise(function (resolve, reject) {\n            var xhr = new XMLHttpRequest();\n            xhr.open(\"POST\", url);\n            xhr.setRequestHeader(\"Content-Type\", \"application/json\");\n\n            xhr.addEventListener(\"load\", function () {\n                if (xhr.status === 200) {\n                    var response = xhr.responseText;\n                    resolve(response);\n                } else {\n                    reject(xhr.statusText);\n                }\n            });\n\n            xhr.addEventListener(\"error\", function () {\n                reject(\"Network error\");\n            });\n\n            xhr.send(JSON.stringify(data));\n        });\n    }\n\n    window.onload = async function () {\n\n        const urlParams = new URLSearchParams(window.location.search);\n        clickid = urlParams.get('clickid') ? urlParams.get('clickid') : \"\";\n        if (clickid === \"\") {\n            console.log(\"warning: find not clickid\");\n            return;\n        }\n\n        cookie_data = {\n            \"user_data\": {\n                \"client_user_agent\": navigator.userAgent,\n                \"fbc\": getCookie('_fbc'),\n                \"fbp\": getCookie('_fbp')\n            },\n            \"event_source_url\": getCookie('fb.currentHref'),\n            \"pixelid\": id,\n            \"access_token\": access_token,\n            \"__sem_type_name\": \"facebook-bi\",\n            \"__sem_type_verion\": \"2.0\"\n        };\n\n        await jump();\n\n    }\n</script>\n</html>",
+      "imgUrl": "",
+      "id": 1
     },
     {
-      "title": "faceBook",
-      "group": "faceBook",
-      "type": "lander",
-      "footerCode": "<script>\n  window.onload = function() {\n    document.cookie = \"fb.currentHref=\" + window.location.href + \"; path=/\";\n  }\n</script>",
-      "headerCode": "<script>\n  !function(f,b,e,v,n,t,s)\n  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?\n  n.callMethod.apply(n,arguments):n.queue.push(arguments)};\n  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';\n  n.queue=[];t=b.createElement(e);t.async=!0;\n  t.src=v;s=b.getElementsByTagName(e)[0];\n  s.parentNode.insertBefore(t,s)}(window, document,'script',\n  'https://connect.facebook.net/en_US/fbevents.js');\n  fbq('init', 'pixel');\n  fbq('track', 'PageView');\n</script>\n<noscript>\n    <img height=\"1\" width=\"1\" style=\"display:none\" src=\"https://www.facebook.com/tr?id=pixel&ev=PageView&noscript=1\"/>\n</noscript>",
-      "code": "<!DOCTYPE html>\n<html lang=\"en\" style=\"--sidebar-width: 300px;\">\n<head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>load</title>\n    <style>\n        .loading-container {\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            height: 100vh;\n        }\n\n        .loading-spinner {\n            border: 8px solid #f3f3f3;\n            /* Light gray */\n            border-top: 8px solid #3498db;\n            /* Blue */\n            border-radius: 50%;\n            width: 60px;\n            height: 60px;\n            animation: spin 1s linear infinite;\n        }\n\n        @keyframes spin {\n            0% {\n                transform: rotate(0deg);\n            }\n\n            100% {\n                transform: rotate(360deg);\n            }\n        }\n    </style>\n\n</head>\n\n<body>\n    <div class=\"loading-container\">\n        <div class=\"loading-spinner\"></div>\n    </div>\n</body>\n\n<script>\n    var clickid = \"\";\n    var cookie_data = {\n\n    };\n    let id = 'pixel';\n    let access_token = 'tokens';\n    let dt_url = \"https://betfrom.com/popup/registration?btag=\";\n\n\n    async function jump() {\n\n        var url = \"https://bs2s.semfoundry.com/api/BetfromADMonitor/setCookie\";\n        var data = {\n            key: clickid,\n            data: cookie_data\n        };\n        try {\n            var response = await sendPostRequest(url, data);\n\n        } catch (error) {\n            console.log(\"Error:\", error);\n            return;\n        }\n        var ref_url = dt_url + clickid;\n\n        window.location.href = ref_url\n    }\n\n     function getCookie(name) {\n        var cookies = document.cookie.split(\"; \");\n        for (var i = 0; i < cookies.length; i++) {\n            var cookie = cookies[i].split(\"=\");\n            if (cookie[0] === name) {\n                return cookies[i].substring(cookie[0].length+1);\n            }\n        }\n        return null;\n    }\n\n    async function sendPostRequest(url, data) {\n        return new Promise(function (resolve, reject) {\n            var xhr = new XMLHttpRequest();\n            xhr.open(\"POST\", url);\n            xhr.setRequestHeader(\"Content-Type\", \"application/json\");\n\n            xhr.addEventListener(\"load\", function () {\n                if (xhr.status === 200) {\n                    var response = xhr.responseText;\n                    resolve(response);\n                } else {\n                    reject(xhr.statusText);\n                }\n            });\n\n            xhr.addEventListener(\"error\", function () {\n                reject(\"Network error\");\n            });\n\n            xhr.send(JSON.stringify(data));\n        });\n    }\n\n    window.onload = async function () {\n\n        const urlParams = new URLSearchParams(window.location.search);\n        clickid = urlParams.get('clickid') ? urlParams.get('clickid') : \"\";\n        if (clickid === \"\") {\n            console.log(\"warning: find not clickid\");\n            return;\n        }\n\n        cookie_data = {\n            \"user_data\": {\n                \"client_user_agent\": navigator.userAgent,\n                \"fbc\": getCookie('_fbc'),\n                \"fbp\": getCookie('_fbp')\n            },\n            \"event_source_url\": getCookie('fb.currentHref'),\n            \"pixelid\": id,\n            \"access_token\": access_token,\n            \"__sem_type_name\": \"facebook-bi\",\n            \"__sem_type_verion\": \"2.0\"\n        };\n\n        await jump();\n\n    }\n</script>\n</html>",
+      "title": "快手1",
+      "group": "kuaiShou",
+      "footerCode": "<script>\nwindow.onload = function () {\n  const urlParams = new URLSearchParams(window.location.search);\n  var clickid = urlParams.get('click_id') ? urlParams.get('click_id') : \"\";\n  var kwai_callback_url = urlParams.get('kwai_callback_url') ? urlParams.get('kwai_callback_url') : \"https://www.adsnebula.com/log/common\";\n  var testFlag = urlParams.get('testFlag') ? urlParams.get('testFlag') : false;\n  var trackFlag = urlParams.get('trackFlag') ? urlParams.get('trackFlag') : false;\n  var is_attributed = urlParams.get('is_attributed') ? urlParams.get('is_attributed') : 1;\n  var mmpcode = urlParams.get('mmpcode') ? urlParams.get('mmpcode') : \"PL\";\n  var pixelSdkVersion = urlParams.get('pixelSdkVersion') ? urlParams.get('pixelSdkVersion') : \"9.9.9\";\n  \n  // 设置 cookie\n  document.cookie = \"kw.clickid=\" + clickid + \"; path=/\";\n  document.cookie = \"kw.pixelId=\" + pixelId + \"; path=/\";\n  document.cookie = \"kw.currentHref=\" + window.location.href + \"; path=/\";\n  document.cookie = \"kw.kwai_callback_url=\" + kwai_callback_url + \"; path=/\";\n  document.cookie = \"kw.testFlag=\" + testFlag + \"; path=/\";\n  document.cookie = \"kw.trackFlag=\" + trackFlag + \"; path=/\";\n  document.cookie = \"kw.is_attributed=\" + is_attributed + \"; path=/\";\n  document.cookie = \"kw.mmpcode=\" + mmpcode + \"; path=/\";\n  document.cookie = \"kw.pixelSdkVersion=\" + pixelSdkVersion + \"; path=/\";\n  \n  // window.location.href = \"{offer_link}\"\n}\n</script>",
+      "headerCode": "<script>\n  !function (e, t) { \"object\" == typeof exports && \"object\" == typeof module ? module.exports = t() : \"function\" == typeof define && define.amd ? define([], t) : \"object\" == typeof exports ? exports.install = t() : e.install = t() }(window, (function () { return function (e) { var t = {}; function n(r) { if (t[r]) return t[r].exports; var o = t[r] = { i: r, l: !1, exports: {} }; return e[r].call(o.exports, o, o.exports, n), o.l = !0, o.exports } return n.m = e, n.c = t, n.d = function (e, t, r) { n.o(e, t) || Object.defineProperty(e, t, { enumerable: !0, get: r }) }, n.r = function (e) { \"undefined\" != typeof Symbol && Symbol.toStringTag && Object.defineProperty(e, Symbol.toStringTag, { value: \"Module\" }), Object.defineProperty(e, \"__esModule\", { value: !0 }) }, n.t = function (e, t) { if (1 & t && (e = n(e)), 8 & t) return e; if (4 & t && \"object\" == typeof e && e && e.__esModule) return e; var r = Object.create(null); if (n.r(r), Object.defineProperty(r, \"default\", { enumerable: !0, value: e }), 2 & t && \"string\" != typeof e) for (var o in e) n.d(r, o, function (t) { return e[t] }.bind(null, o)); return r }, n.n = function (e) { var t = e && e.__esModule ? function () { return e.default } : function () { return e }; return n.d(t, \"a\", t), t }, n.o = function (e, t) { return Object.prototype.hasOwnProperty.call(e, t) }, n.p = \"\", n(n.s = 0) }([function (e, t, n) { \"use strict\"; var r = this && this.__spreadArray || function (e, t, n) { if (n || 2 === arguments.length) for (var r, o = 0, i = t.length; o < i; o++)!r && o in t || (r || (r = Array.prototype.slice.call(t, 0, o)), r[o] = t[o]); return e.concat(r || Array.prototype.slice.call(t)) }; !function (e) { var t = window; t.KwaiAnalyticsObject = e, t[e] = t[e] || []; var n = t[e]; n.methods = [\"page\", \"track\", \"identify\", \"instances\", \"debug\", \"on\", \"off\", \"once\", \"ready\", \"alias\", \"group\", \"enableCookie\", \"disableCookie\"]; var o = function (e, t) { e[t] = function () { var n = Array.from(arguments), o = r([t], n, !0); e.push(o) } }; n.methods.forEach((function (e) { o(n, e) })), n.instance = function (e) { var t = n._i[e] || []; return n.methods.forEach((function (e) { o(t, e) })), t }, n.load = function (t, r) { n._i = n._i || {}, n._i[t] = [], n._i[t]._u = \"https://s1.kwai.net/kos/s101/nlav11187/pixel/events.js\", n._t = n._t || {}, n._t[t] = +new Date, n._o = n._o || {}, n._o[t] = r || {}; var o = document.createElement(\"script\"); o.type = \"text/javascript\", o.async = !0, o.src = \"https://s1.kwai.net/kos/s101/nlav11187/pixel/events.js?sdkid=\" + t + \"&lib=\" + e; var i = document.getElementsByTagName(\"script\")[0]; i.parentNode.insertBefore(o, i) } }(\"kwaiq\") }]) }));\n</script>\n<script>\n  let pixelId = \"editPixelId\";\n  kwaiq.load(pixelId);\n  kwaiq.page();\n</script>",
+      "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Load</title>\n\n    <style>\n        body {\n            margin: 0;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            height: 100vh;\n        }\n\n        .big-button {\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            width: 200px;\n            height: 100px;\n            background-color: #3498db;\n            /* Blue */\n            color: #fff;\n            /* White */\n            font-size: 24px;\n            border: none;\n            border-radius: 10px;\n            cursor: pointer;\n        }\n\n        .loading-container {\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            height: 100vh;\n        }\n\n        .loading-spinner {\n            border: 8px solid #f3f3f3;\n            /* Light gray */\n            border-top: 8px solid #3498db;\n            /* Blue */\n            border-radius: 50%;\n            width: 60px;\n            height: 60px;\n            animation: spin 1s linear infinite;\n        }\n\n        @keyframes spin {\n            0% {\n                transform: rotate(0deg);\n            }\n\n            100% {\n                transform: rotate(360deg);\n            }\n        }\n    </style>\n</head>\n\n<body>\n    <div class=\"loading-container\">\n        <div class=\"loading-spinner\"></div>\n    </div>\n</body>\n\n<script>\n    let params = {\n        url: \"https://betfrom.com/popup/registration?btag=\",\n        access_token: 'tokens',\n        version: \"2.0\",\n        type: \"kwai-bi\"\n    }\n\n    async function jump() {\n\n        var url = \"https://bs2s.semfoundry.com/api/BetfromADMonitor/setCookie\";\n        var data = {\n            key: params.biclickid,\n            data: cookie_data\n        };\n        try {\n            var response = await sendPostRequest(url, data);\n\n        } catch (error) {\n            console.log(\"Error:\", error);\n            // return;\n        }\n\n\n        try {\n            let data2 = {\n                 \"access_token\": params.access_token,\n                \"clickid\": getCookie(\"kw.clickid\"),\n                \"event_name\": \"EVENT_CONTENT_VIEW\",\n                 \"is_attributed\": getCookie(\"kw.is_attributed\"),\n                \"mmpcode\": getCookie(\"kw.mmpcode\"),\n                \"pixelId\": getCookie(\"kw.pixelId\"),\n                \"pixelSdkVersion\": getCookie(\"kw.pixelSdkVersion\"),\n                \"testFlag\": getCookie(\"kw.testFlag\"),\n                \"trackFlag\": getCookie(\"kw.trackFlag\")\n            }\n            var response2 = await sendPostRequest('https://www.adsnebula.com/log/common/api', data2);\n\n        } catch (error) {\n            console.log(\"Error:\", error);\n            // return;\n        }\n\n        var ref_url = params.url + params.biclickid;\n        console.log(ref_url);\n        window.location.href = ref_url\n    }\n\n    function getCookie(name) {\n        var cookies = document.cookie.split(\"; \");\n        for (var i = 0; i < cookies.length; i++) {\n            var cookie = cookies[i].split(\"=\");\n            if (cookie[0] === name) {\n                return cookies[i].substring(cookie[0].length + 1);\n            }\n        }\n        return null;\n    }\n\n    async function sendPostRequest(url, data) {\n        return new Promise(function (resolve, reject) {\n            var xhr = new XMLHttpRequest();\n            xhr.open(\"POST\", url);\n            xhr.setRequestHeader(\"Content-Type\", \"application/json\");\n\n            xhr.addEventListener(\"load\", function () {\n                if (xhr.status === 200) {\n                    var response = xhr.responseText;\n                    resolve(response);\n                } else {\n                    reject(xhr.statusText);\n                }\n            });\n\n            xhr.addEventListener(\"error\", function () {\n                reject(\"Network error\");\n            });\n\n            xhr.send(JSON.stringify(data));\n        });\n    }\n\n    // save cookie --> btag\n    window.onload = function () {\n        const urlParams = new URLSearchParams(window.location.search);\n        params.biclickid = urlParams.get('clickid') ? urlParams.get('clickid') : \"\";\n\n        let pixelExtData = {\n            \"kwaiInfo\": {\n                \"currentHref\": getCookie(\"kw.currentHref\"),\n                \"host\": window.location.host,\n                \"navigator\": navigator.userAgent,\n                \"tirdParty\": \"none\",\n                \"kwaiAdInfoSource\": \"url\",\n                \"referrer\": \"\",\n                \"inIframe\": false,\n                \"isGtm\": false\n            },\n            \"sendMethod\": 1,\n            \"sendWithXhrAsync\": false\n        }\n\n        let kw_data = {\n            \"access_token\": params.access_token,\n            \"clickid\": getCookie(\"kw.clickid\"),\n            \"is_attributed\": getCookie(\"kw.is_attributed\"),\n            \"mmpcode\": getCookie(\"kw.mmpcode\"),\n            \"pixelId\": getCookie(\"kw.pixelId\"),\n            \"pixelSdkVersion\": getCookie(\"kw.pixelSdkVersion\"),\n            \"testFlag\": getCookie(\"kw.testFlag\"),\n            \"trackFlag\": getCookie(\"kw.trackFlag\"),\n            \"pixelExtData\": pixelExtData,\n            \"kwai_callback_url\": getCookie(\"kw.kwai_callback_url\"),\n        }\n\n        cookie_data = {\n            \"__sem_type_name\": params.type,\n            \"__sem_type_verion\": params.version,\n            \"kw_data\": kw_data\n        };\n\n        jump();\n    }\n</script>\n</html>",
+      "imgUrl": "",
       "id": 2
+    },
+    {
+      "title": "123",
+      "group": "faceBook",
+      "footerCode": "3333",
+      "headerCode": "123",
+      "code": "123",
+      "imgUrl": "",
+      "id": 3
     }
   ],
   "webGroup": [
@@ -58,6 +127,615 @@
       "group": "0",
       "url": "img/image 57.png",
       "id": 1
+    }
+  ],
+  "Authorization": "Authorization=eyJ1c2VySWQiOjQsInJvbGUiOiJ1c2VyIiwiZXhwaXJlZCI6MTcxMDA3NDA4Nn18ZjQzOTdkOTdlYjkwZjhjNjJhZTFkOGRmNTMxMzY1NzlkOTI2Nzg4MTdkZjFhYWQyM2QzMTk1MzcyOThhODY5MQ%3D%3D;",
+  "Binom": "Binom=560b8b7c1b2de5ec41ccf01cf5431d60;",
+  "groupsArr": [
+    {
+      "uuid": "acf2a3c8-9e44-46ee-a946-08e39656bf14",
+      "name": "bf"
+    },
+    {
+      "uuid": "fc394068-d272-4a4b-98ff-1000587ed670",
+      "name": "wrts-脸书起量"
+    },
+    {
+      "uuid": "e24e38b7-4f91-4190-87f5-0969bb798475",
+      "name": "模版"
+    },
+    {
+      "uuid": "2883df92-e2ee-4455-8f53-9ee98d49845e",
+      "name": "betfrom"
+    },
+    {
+      "uuid": "75608189-5004-4608-9c39-decafee0f0bd",
+      "name": "betfrom -  propeller"
+    },
+    {
+      "uuid": "5515c26f-0d15-4b48-a5f3-b8df0295a285",
+      "name": "越南直推"
+    },
+    {
+      "uuid": "015d15d9-7551-4c50-858c-701a87d35b7a",
+      "name": "越南代投"
+    },
+    {
+      "uuid": "caf9d069-52f1-4d1a-866b-ab48806201e0",
+      "name": "Betfrom代投-A5+1"
+    },
+    {
+      "uuid": "026267f9-b2e8-41a8-bbc7-0ce6a96664e3",
+      "name": "巴西-星汇"
+    },
+    {
+      "uuid": "648decce-f3ba-4f95-b01e-12a172a382d0",
+      "name": "SEMF&CyberAds"
+    },
+    {
+      "uuid": "4fda02a9-4314-4a78-901b-32ca1e2bef8c",
+      "name": "波波代投01"
+    },
+    {
+      "uuid": "c0cef9c1-f9dc-461b-ac87-1f24e76b7562",
+      "name": "Jesmon"
+    },
+    {
+      "uuid": "009477ea-7e9e-4724-bcb2-78f3768fdb8e",
+      "name": "快手模版"
+    },
+    {
+      "uuid": "cf531dd0-3007-456c-863f-f21a807124b9",
+      "name": "9哥巴西快手"
+    },
+    {
+      "uuid": "8ca1f643-248a-42d0-ae84-010745ba30a1",
+      "name": "Miao推广"
+    },
+    {
+      "uuid": "4876ad78-8112-40c8-a61f-901839ce84af",
+      "name": "WRTS 脸书代投"
+    },
+    {
+      "uuid": "9c243402-7011-4ba2-a5c5-92eb8ddb922e",
+      "name": "AppsFlyer模版"
+    },
+    {
+      "uuid": "9d235a3e-15a5-4182-a42b-8b46c1222ced",
+      "name": "1322"
+    },
+    {
+      "uuid": "ebdddc5c-3c80-48ec-b68d-45d320b3a568",
+      "name": "Sabrina"
+    },
+    {
+      "uuid": "11b8f9f3-c3f7-459f-8f44-d294d7b26d81",
+      "name": "Sabrina - Facebook"
+    },
+    {
+      "uuid": "c86da183-c059-4949-98de-226d69e2996f",
+      "name": "Tiger"
+    },
+    {
+      "uuid": "cc6cd880-7215-4a02-a93e-c31d6f733665",
+      "name": "tiktok"
+    },
+    {
+      "uuid": "26ca6cac-d787-46c2-aa0d-86cddcef61cd",
+      "name": "taidong"
+    },
+    {
+      "uuid": "85e64e8e-1207-4d9d-9ffb-2a5fa1430fa4",
+      "name": "Youmi"
+    },
+    {
+      "uuid": "a143e630-7c1b-4396-ad81-d1ecd2d0fc03",
+      "name": "wrts-kwai"
+    },
+    {
+      "uuid": "12233e02-16fe-4b24-832d-f38a18d230b0",
+      "name": "马甲包 mjb"
+    },
+    {
+      "uuid": "9657a305-a5b2-466b-a932-3b86b8ac609d",
+      "name": "YZ-64组-巴西"
+    },
+    {
+      "uuid": "b6e67a9d-1753-412c-a793-1f74d2746097",
+      "name": "9哥巴西Tiktok"
+    },
+    {
+      "uuid": "5d1faed2-63b8-4724-9f6f-77ae90d8e81b",
+      "name": "巴西🇧🇷风帆代投"
+    },
+    {
+      "uuid": "1cdd402c-2b7b-4f0f-a51c-2e0cc1387503",
+      "name": "bobo01"
+    }
+  ],
+  "domainsArr": [
+    {
+      "id": "135a4905-c58d-4744-9cc2-efb6a150e39a",
+      "domain": "loopfrom.com",
+      "createdAt": "2023-10-11 08:11:12",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 0
+    },
+    {
+      "id": "1db3c885-b842-464d-87b1-a94606ebaab4",
+      "domain": "dtmtb.com",
+      "createdAt": "2023-10-11 08:29:13",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 33
+    },
+    {
+      "id": "b669d41f-450c-48c0-a862-75fc6bd52502",
+      "domain": "btrdmsc.site",
+      "createdAt": "2023-11-15 17:07:02",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 32
+    },
+    {
+      "id": "c1d77991-7213-4165-af9f-42027ca9afff",
+      "domain": "infinitelucky.com",
+      "createdAt": "2023-12-10 12:59:07",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 10
+    },
+    {
+      "id": "b7218c1e-dcf0-41bf-8d55-35fee7dd004b",
+      "domain": "olafunny.com",
+      "createdAt": "2023-12-10 12:59:21",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": true,
+      "campaignsCount": 16
+    },
+    {
+      "id": "b57f49c9-648e-4057-a811-c4658846739a",
+      "domain": "queuengine.com",
+      "createdAt": "2023-12-10 12:59:34",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 4
+    },
+    {
+      "id": "9c67d3a5-8752-4cfd-8e6d-299c0525051a",
+      "domain": "techsparkplug.com",
+      "createdAt": "2023-12-10 12:59:48",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 2
+    },
+    {
+      "id": "2172b2f8-2056-4f55-b860-1c82442c585a",
+      "domain": "minhmiao.xyz",
+      "createdAt": "2023-12-19 16:13:31",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 5
+    },
+    {
+      "id": "293159bb-3b1e-414a-8a3e-ea852a600735",
+      "domain": "bf10h.com",
+      "createdAt": "2023-12-20 05:07:34",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 4
+    },
+    {
+      "id": "bf5341e9-bc98-48e1-af0c-aea38a1319e4",
+      "domain": "bf10p.com",
+      "createdAt": "2023-12-20 05:07:39",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 9
+    },
+    {
+      "id": "2abb4e42-fa78-4445-8983-f158c37988fa",
+      "domain": "xinghuibr.com",
+      "createdAt": "2023-12-20 05:08:27",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 4
+    },
+    {
+      "id": "dba8ccea-75ba-4647-a52e-fc31748b13ed",
+      "domain": "wrtsliang.com",
+      "createdAt": "2023-12-20 05:09:47",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 7
+    },
+    {
+      "id": "f3929bda-2fee-4e70-95b0-eb5f83fa29ef",
+      "domain": "semfcyber.com",
+      "createdAt": "2023-12-20 05:13:04",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 2
+    },
+    {
+      "id": "6964146f-11bf-447f-9770-0e16c649bc8d",
+      "domain": "chsbrn.com",
+      "createdAt": "2023-12-20 05:35:43",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 6
+    },
+    {
+      "id": "bf26e231-9c67-482f-8ceb-552aa8292390",
+      "domain": "bfa51.com",
+      "createdAt": "2023-12-28 08:47:41",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 1
+    },
+    {
+      "id": "b3539d20-2604-4f82-b2ce-6c79046cd3ff",
+      "domain": "tdadfb.com",
+      "createdAt": "2023-12-28 09:30:50",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 3
+    },
+    {
+      "id": "ef0bd83f-7aff-4dde-94a2-70112fe63637",
+      "domain": "9gad.com",
+      "createdAt": "2023-12-28 09:35:15",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 3
+    },
+    {
+      "id": "a0e655ed-4cd8-4e63-8f08-d610dad4b8eb",
+      "domain": "bfadst.com",
+      "createdAt": "2024-01-02 18:05:31",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 4
+    },
+    {
+      "id": "fde10d6d-05f7-4742-89db-9ec335ac2ab5",
+      "domain": "ad1322.com",
+      "createdAt": "2024-01-05 04:24:18",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 1
+    },
+    {
+      "id": "d4bbca30-ed65-477d-b39e-238d4d75b031",
+      "domain": "naegames.xyz",
+      "createdAt": "2024-01-21 13:36:18",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 1
+    },
+    {
+      "id": "2bc26306-8658-446e-9219-6e808ec76fe6",
+      "domain": "birdjiji.com",
+      "createdAt": "2024-01-25 07:55:42",
+      "indexPage": "blank_page",
+      "isSsl": false,
+      "certificateError": "",
+      "checkError": "can not provide a secure connection",
+      "isDefault": false,
+      "campaignsCount": 0
+    },
+    {
+      "id": "e38960c6-0880-40ca-9e69-c0347265db09",
+      "domain": "tdbfqm.com",
+      "createdAt": "2024-01-26 05:00:39",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 4
+    },
+    {
+      "id": "d881fa58-fdc6-48d3-8801-f7a245d6d180",
+      "domain": "vnadqm.com",
+      "createdAt": "2024-01-26 06:42:06",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 1
+    },
+    {
+      "id": "7e27a2a2-2d53-4759-805b-f44a351be678",
+      "domain": "qmsadb.com",
+      "createdAt": "2024-01-26 09:23:48",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 16
+    },
+    {
+      "id": "e3a788f8-08cf-48db-9db0-7a6e76f55bd7",
+      "domain": "qottta.com",
+      "createdAt": "2024-01-27 08:27:11",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 2
+    },
+    {
+      "id": "7f8171b7-7bfd-444f-b77b-909fb03f31c6",
+      "domain": "dtaftb.com",
+      "createdAt": "2024-01-28 06:37:55",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 3
+    },
+    {
+      "id": "983688bf-e31f-431e-b4a5-620c0d4d89c3",
+      "domain": "b51f.xyz",
+      "createdAt": "2024-01-29 14:50:55",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 2
+    },
+    {
+      "id": "562b2c25-dd4d-472c-be77-cc3da53a2331",
+      "domain": "bfffcm.xyz",
+      "createdAt": "2024-01-30 06:08:37",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 5
+    },
+    {
+      "id": "00bfe134-b31a-4e57-82da-15b2b156d037",
+      "domain": "baobaobf.xyz",
+      "createdAt": "2024-02-01 09:35:23",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 1
+    },
+    {
+      "id": "e1e7a929-1882-4a1b-90bf-e57319593112",
+      "domain": "qmffdt.com",
+      "createdAt": "2024-02-04 04:39:25",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 1
+    },
+    {
+      "id": "19ce5e94-fb7a-4106-be75-cea5f4437949",
+      "domain": "bflander.com",
+      "createdAt": "2024-02-04 05:07:28",
+      "indexPage": "blank_page",
+      "isSsl": true,
+      "certificateError": "",
+      "checkError": "",
+      "isDefault": false,
+      "campaignsCount": 6
+    }
+  ],
+  "campaignsArr": [
+    {
+      "uuid": "3d9a83c7-b60f-4588-bb54-be747accb752",
+      "name": "wrts-脸书起量群"
+    },
+    {
+      "uuid": "a29d08d6-8ca3-4ccc-b868-af3296693b11",
+      "name": "Digitain 程序化推广"
+    },
+    {
+      "uuid": "5e26b5cd-acdb-4f2c-bd87-d88db5b9291b",
+      "name": "betfrom -  propeller"
+    },
+    {
+      "uuid": "59015a95-92eb-4568-b3ba-337dd9d22891",
+      "name": "越南直推"
+    },
+    {
+      "uuid": "c8bbe6e5-b0cd-40f8-aa31-1989d44e03f3",
+      "name": "越南代投"
+    },
+    {
+      "uuid": "f7463347-0468-4b6f-8d0f-74355d3e6bb8",
+      "name": "Betfrom代投-A5+1"
+    },
+    {
+      "uuid": "d76e59e7-2b8d-4d30-8c06-e5a74fac4330",
+      "name": "巴西 & 星汇"
+    },
+    {
+      "uuid": "f3ea6c44-c9ea-4691-80cf-5522740238af",
+      "name": "SEMF&CyberAds"
+    },
+    {
+      "uuid": "b01e97ee-85d0-4509-b0c2-012add76404d",
+      "name": "波波代投01"
+    },
+    {
+      "uuid": "e1e6e8fc-c88a-4df6-a7cc-95853f2a55dd",
+      "name": "Youmi"
+    },
+    {
+      "uuid": "c380736a-ed27-4d2e-b1ff-1ffa5482ce9c",
+      "name": "Goapostas"
+    },
+    {
+      "uuid": "024b91d7-f6bf-4207-a4fb-3240339b3788",
+      "name": "betfrom - 电台"
+    },
+    {
+      "uuid": "21f1f238-b8be-4193-b97a-0e1571aea1bd",
+      "name": "Jesmon"
+    },
+    {
+      "uuid": "35ac3657-f366-4861-a80b-8825f1738677",
+      "name": "betfrom - adsterra"
+    },
+    {
+      "uuid": "e18ff438-c851-4a6f-8cb4-856ea78fa6fc",
+      "name": "9哥巴西快手"
+    },
+    {
+      "uuid": "9d4059e1-3288-4971-aa44-79e1f0a11c76",
+      "name": "betfrom - richads"
+    },
+    {
+      "uuid": "9988a8bc-e71c-4dbb-8bd2-99e29edf8531",
+      "name": "Miao推广"
+    },
+    {
+      "uuid": "9ed38153-67e5-4c89-aff5-587ec22aecd0",
+      "name": "巴西APK"
+    },
+    {
+      "uuid": "20bfc3c7-8d10-41ad-8859-425db790450c",
+      "name": "BHW"
+    },
+    {
+      "uuid": "35ebd312-b923-4e83-918a-d10904fc5ccf",
+      "name": "WRTS 脸书代投"
+    },
+    {
+      "uuid": "07903ba1-b5be-4439-b89d-602563820bd2",
+      "name": "网红CPA"
+    },
+    {
+      "uuid": "29bf7de9-b603-47b3-90e1-d283997fc6db",
+      "name": "1322"
+    },
+    {
+      "uuid": "4f8d23b3-ae3f-4789-a5b1-28ade74a9c3d",
+      "name": "Sabrina - Facebook"
+    },
+    {
+      "uuid": "9da7ea18-95d8-4bde-8bed-4b7b51e73374",
+      "name": "Sabrina - Kwai"
+    },
+    {
+      "uuid": "46929a73-b148-4976-a89e-0b510edcd6c8",
+      "name": "钛动"
+    },
+    {
+      "uuid": "a24f9f47-041a-437f-ab52-e63cd9523a61",
+      "name": "wrts-kwai"
+    },
+    {
+      "uuid": "14a64f2f-0caf-4fc3-8b69-cefd36579855",
+      "name": "betfrom-主页"
+    },
+    {
+      "uuid": "f6ba20ee-a903-4cec-b332-7e5d5c42b33d",
+      "name": "Sabrina - google"
+    },
+    {
+      "uuid": "1fd0b98d-f14a-4513-bcc2-af57a6d99452",
+      "name": "MJB - A"
+    },
+    {
+      "uuid": "4e6c6a3b-7a14-43ae-8af9-5d86b113da7b",
+      "name": "MJB - B"
+    },
+    {
+      "uuid": "03037ba9-7cfb-46fb-91eb-0f46c8fdedf9",
+      "name": "9g"
+    },
+    {
+      "uuid": "311e4506-dd65-49ce-a213-9e1148423a4f",
+      "name": "YZ-64组-巴西"
+    },
+    {
+      "uuid": "3030ff41-672f-4d81-af04-2dd67842fe8d",
+      "name": "9哥巴西Tiktok"
+    },
+    {
+      "uuid": "af9fc15b-6d1e-48a3-933d-8c5f50577fab",
+      "name": "巴西🇧🇷风帆代投"
+    },
+    {
+      "uuid": "194759e1-1c96-4402-bdc4-ce986bbc3f6c",
+      "name": "bobo01"
     }
   ]
 }
