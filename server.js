@@ -638,8 +638,9 @@ app.post("/jimapi/setPlace",async (req,res)=>{
         // }
         const db=await getDb()
         const lastList= db.list
-        list.id=lastList.length === 0 ? 1 : lastList.length + 1,
-            db.list.unshift(list)
+        list.id = lastList.length === 0 ? 1 : lastList.length + 1
+        list.startDate = new Date().getTime()
+        db.list.unshift(list)
         await saveDb(db)
         // res.status(200).json(list)
         res.json({
@@ -682,7 +683,10 @@ app.delete("/jimapi/deletePlace/:id",async (req,res)=>{
         }
         db.list.splice(index,1)
         await saveDb(db)
-        res.status(200).send("删除成功")
+        res.json({
+            code:'200',
+            msg:'删除成功'
+        });
     }catch (err){
 
     }
@@ -1063,7 +1067,7 @@ app.use("/jimapi/lander/:id",async (req,res,next)=>{
                                     let obj = {
                                         groupUuid:list.deliveryTeamNumber,
                                         languageCode : "",
-                                        name : list.describe + ' - lander',
+                                        name : list.landerName + ' ' + list.describe + ' - lander',
                                         path :response.data.landing_file
                                     }
 
@@ -1185,7 +1189,7 @@ app.use("/jimapi/offer/:id", async(req,res,next)=>{
             let obj = {
                 groupUuid:list.deliveryTeamNumber,
                 languageCode : "",
-                name : list.describe + ' - offer',
+                name : list.landerName + ' ' + list.describe + ' - offer',
                 path :response.data.landing_file
             }
 
