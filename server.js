@@ -665,7 +665,10 @@ app.post("/jimapi/setPlace/:id",async (req,res)=>{
         }
         Object.assign(ret,list)
         await saveDb(db)
-        res.status(200).json(ret)
+        res.json({
+            code:'200',
+            msg:'修改成功'
+        });
     }catch (err){
         res.status(500).json({
             error:err.message
