@@ -12,6 +12,7 @@ const rimraf = require("rimraf");
 const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
 
+
 // const https = require('https');
 // const fs = require('fs');
 // let options = {
@@ -40,6 +41,10 @@ const FormData = require('form-data');
 // })
 
 const port = 4000;
+
+const { getGroups }  = require( './controllers/productController.js');
+
+app.use('/jimapi/getGroups', getGroups);
 
 app.use('/jimapi/loginBinom', async (req, res) => {
     try {

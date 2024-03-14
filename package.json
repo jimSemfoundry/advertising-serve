@@ -18,6 +18,7 @@
     "download-git-repo": "^3.0.2",
     "express": "^4.16.3",
     "file-api": "^0.10.4",
+    "firebase": "^10.8.1",
     "form-data": "^4.0.0",
     "jszip": "^3.10.1",
     "multer": "^1.4.5-lts.1",
